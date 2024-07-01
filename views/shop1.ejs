@@ -1,0 +1,130 @@
+<!--https://www.udemy.com/course/bootstrap-from-scratch/learn/lecture/38476162?start=300#content-->
+<!--https://getbootstrap.com/docs/4.0/components/carousel/-->
+<!-- https://www.youtube.com/watch?v=ku_97a6Bgkg&t=239s-->
+<!-- https://www.youtube.com/watch?v=xReQ_nQbdmA-->
+<!--Carousel design was learned from links above. The carousel below was included in the udemy  course-->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/style.css" />
+    <!--link to code for function to count cart items-->
+    <script src="/app.js"></script>
+
+    <title>Categories</title>
+  </head>
+  <body>
+    <!-- dynamically inserts navbar from navbar.ejs. 
+    This is very useful for efficiency as navbar only has to be adjusted on one page-->
+    <%- include('navbar') %>
+    <!--This div is to create a gap between the navbar and the content-->
+    <div style="height: 200px"></div>
+    <!--text-center centers text inside the div-->
+    <div class="text-center" style="height: 100px">
+      <h1>Categories</h1>
+    </div>
+    <!--creates a container div-->
+    <div class="container">
+      <!-- Carousel class tells bootstrap to apply the carousel component sets up basic structure to allow carousel to function -->
+      <!-- slide class adds a sliding animation to the carousel -->
+      <!-- id of slider is esesential as its used internally by bootstraps javascript to associate actions like sliding to next item with the correct carousel instance.-->
+      <div class="carousel slide" id="slider">
+        <!--This class contains the carousel items and handles the layout and overflow of the items.-->
+        <div class="carousel-inner">
+          <!--prodCategories is passed to the shop1.ejs from the route handler-->
+          <!-- the method forEach()  loops through each of the prodCategories results retreived from the database query and passed to the shop1 page when rendering -->
+          <!--the loop takes two parameters, product which represents the product object in the current iteration
+              and index which represents the current index of the object array loop iteration sarting at 0  -->
+          <!-- the following html code will be executed for each on of the results that has been passed to this page-->
+
+          <% prodCategories.forEach((product, index) => { %>
+
+          <!--The index === 0 ? 'active' condition applies the active class to the first carousel item only. This ensures that the first item is initially displayed when the carousel loads. -->
+          <!-- This ternary operator checks if there is a first element in the array -->
+          <!-- if there is, the operator returns active which adds the active class to the current carousel item -->
+          <!-- if false the operator returns an empty string so no active class is added and the carousel remains inactive-->
+          <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
+            <!-- d-flex applies the flexbox display property to create a flex container.
+                justify-content-center horizontally centers the content within the flex container.
+                align-items-center vertically centers the content within the flex container.-->
+            <div class="d-flex justify-content-center align-items-center">
+              <!-- Create a Bootstrap card component. -->
+              <div class="card">
+                <!--The image on the card a link to the next products page-->
+                <!--The "stretched-link" class extends the clickable area of the link to cover the entire image container, making it easier to interact with.-->
+                <!--The link foes to the route shop2-->
+                <!-- shop2?id=<%= product.Id %>" - The "Id" property is used as a query parameter in the URL to pass the product ID to the next page.. -->
+                <a
+                  href="/shop2?id=<%= product.Id %>"
+                  class="card-link stretched-link"
+                >
+                  <!-- Display the product image within the card dynamically for each product. -->
+                  <!-- card-img-top defines the image as a card image that will be displayed on top of the card-->
+                  <!-- img fluid added even though there is css to counteract. Left it in for future development-->
+                  <img
+                    src="/images/categoryImages/<%= product.image %>"
+                    alt=""
+                    class="card-img-top img-fluid"
+                  />
+                </a>
+                <!--Card body below image . text-center centers text in card body-->
+                <div class="card-body text-center">
+                  <!--card-title class displays a title dynamically from datatbase results-->
+                  <h5 class="card-title"><%= product.name %></h5>
+                  <!--card-text used for text within card. Display the product description dynamically-->
+                  <p class="card-text"><%= product.description %></p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--end of function forEach()-->
+          <% }) %>
+          <!--end of inner carousel-->
+        </div>
+
+        <!-- Button for navigating to the previous slide in the carousel -->
+        <!-- targets the id of slider specified above at the start of the carousel code block-->
+        <button
+          class="carousel-control-prev"
+          data-bs-slide="prev"
+          data-bs-target="#slider"
+        >
+          <!-- Icon indicating previous slide navigation -->
+          <span class="carousel-control-prev-icon"></span>
+        </button>
+        <!-- Button for navigating to the next slide in the carousel -->
+        <button
+          class="carousel-control-next"
+          data-bs-slide="next"
+          data-bs-target="#slider"
+        >
+          <!-- Icon indicating next slide navigation -->
+          <span class="carousel-control-next-icon"></span>
+        </button>
+      </div>
+    </div>
+    <br />
+    <br />
+    <br />
+
+    <%- include('footer') %>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

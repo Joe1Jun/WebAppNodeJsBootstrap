@@ -1,0 +1,193 @@
+
+*{
+    box-sizing: border-box;
+}
+body{
+
+    background-color: rgb(214, 211, 201);
+}
+
+/* style the main element on the login pages */
+main{
+
+    position: relative;
+    width: 1000px;
+    height: 750px;
+    /* sets the top of the form 10% of the viewport height*/
+    top: 10vh;
+}
+
+/* styles the forms on all pages */
+form{
+    /* makes the width 330px */
+    width: 330px;
+    /* overides default bootstrap classes for forms */
+    margin: auto !important;
+}
+
+.fa-xmark{
+  /* sets position of x on login page ie. it will always been in the same place within its parent container */
+  position:absolute;
+  top:25px;
+  left:25px;
+}
+.fa-xmark:hover{
+  /* changes cursor to a pointer on hover .Also changes the colour of the x mark to the colour specified */ 
+   cursor: pointer;
+   color:  rgb(219, 68, 55);
+
+}
+
+.fa-circle-user, .fa-key, .fa-envelope{
+          border: 1px solid #e6d6f6;
+          padding: 0.5rem;
+
+}
+
+
+
+#img-login{
+
+    height: 750px;
+    width: 100%;
+}
+
+
+#img-confirmation{
+  
+  width: 100%;
+}
+
+
+/* Style card so they are the same size  */
+.card {
+    width: 20rem;
+  }
+  /* image on top of card styling so it covers the whole card across */
+  /* can adjust height */
+  .card-img-top {
+    object-fit: cover;
+    height: 400px;
+  }
+  
+  
+  .navbar-nav .nav-item {
+    /* Adjust as needed the margin to the right of the nav items */
+    margin-right: 5px; 
+    /*color of nav items */
+    color: rgb(156, 153, 153);
+  }
+  nav{
+   /* background colour of nav-bar */
+    background-color:white;
+  }
+  
+  /* this is the class associated with the logo */
+  .navbar-brand img {
+    width: 100%;
+    height: auto;
+    /* Adjust the max-height as needed to fit within the navbar */
+    max-height: 80px;}
+
+  .jumbotron {
+   /* Set the height of the jumbotron to 100% of the viewport height minus 60 pixels (for navbar height) */
+    height: calc(100vh - 60px); 
+   /* Specifies how the content should be resized to fit within the container's box while maintaining aspect ratio */
+    object-fit: contain; 
+    /* Specifies how the background image should be sized to cover the entire container */
+    background-size: cover;
+    /* Specifies the initial position of the background image */
+    background-position: center;
+    /* Turn the jumbotron into a flex container */
+    display: flex;
+     /* Align items (content) vertically within the flex container */
+    align-items: center;
+    /* Align items (content) horizontally within the flex container */
+    justify-content: center;
+    
+    
+
+  }
+  
+  
+  
+ 
+  .bg-image {
+        
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+      
+      
+  }
+
+  /* this is from the shhop2 page */
+  .smaller-image {
+     /* Adjust this value as needed */
+    max-width: 400px;
+   
+}
+  
+
+#shop2maincontainer , #checkout-main-container{
+
+    /* taken from dev tools off a website i liked the design of the container for products. https://www.nueko.de/ */
+    /* Dont fully understand all the grid systems here */
+
+    grid-column-gap:16px;
+    grid-row-gap: 16px;
+    grid-template-rows: auto auto;
+    grid-auto-columns: 1.75fr 1fr;
+    justify-content: space-between;
+    align-items: flex-start;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 40px;
+    padding-left: 40px;
+    padding-right: 40px;
+    display: grid; 
+    background-color: rgb(236, 231, 231);
+
+
+}
+
+
+/* Style for image container */
+.image-container {
+  /* Calculate it as 100% of the viewport height (100vh)*/
+   /* Subtract 200 pixels from the calculated height to accomadate for the div above */
+   
+    height: calc(100vh - 200px); 
+    /* overflow specifies the overflow behavior for the content that exceeds the height of the container:
+      auto allows a vertical scrollbar to appear automatically if content exceeds the container height.
+      This ensures that users can scroll vertically to view all content when necessary.
+    */
+    overflow-y: auto;
+  }
+  
+  /* Style for text container */
+  .text-container {
+    height: calc(100vh - 200px); 
+    /* overflow specifies the overflow behavior for the content that exceeds the height of the container:
+      auto allows a vertical scrollbar to appear automatically if content exceeds the container height.
+      This ensures that users can scroll vertically to view all content when necessary.
+    */
+    overflow-y: auto;
+  }
+
+
+
+
+  .custom-font {
+    /* Adjust the value of home page text on top of image to make the text skinnier */
+    /* Also used this for the text on home and about page as fw-light in bootstrap is not sufficient*/
+
+    font-weight: 70; 
+  }
+  
+
+
+  
+  
+  
