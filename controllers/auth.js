@@ -55,18 +55,7 @@ exports.register = (req, res) => {
        // will render the home page if registration is
        console.log(results);
        // Generate JWT token
-       const id = results.insertId; // Get the ID of the newly inserted user
-       const token = jwt.sign({ id: id }, process.env.JWT_SECRET, {
-           expiresIn: process.env.JWT_EXPIRES_IN
-       });
-       console.log("The token is: " + token);
-   
-       // Set JWT token in a cookie
-       const cookieOptions = {
-         expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000),
-         httpOnly: true
-       };
-       res.cookie('jwt', token, cookieOptions);
+       
        
        return res.status(200).render('login', {
          name : name ,
@@ -82,4 +71,57 @@ exports.register = (req, res) => {
     console.log(error);
     res.status(500).send('Server error');
   }
-       }
+}
+       
+
+exports.login = (req, res) => {
+    
+    try {
+
+        const { email, password } = req.body;
+
+        if (!email || !password) {
+            return res.status(500).render('login', {
+                message: "Please provide an email or password"
+            
+            
+            })
+        }
+
+        db.query('SELECT * FROM users WHERE email = ? ', [email], async (error, results) => {
+            if (error) {
+                console.log(error)
+                return res.status(500).render('login', {
+                    message: "Error registering user"
+                })
+            }
+            if (!results.length || !(await bcrypt.compare(password, results[0].password))) {
+                return res.status(500).render('login', {message: "Email or password incorrect"})
+            }
+            
+            console.log("User logged in ")
+            const id = results[0].Id;
+            const token = jwt.sign({ id: id }, process.env.JWT_SECRET, {
+                expiresIn: process.env.JWT_EXPIRES_IN
+
+            });
+            console.log("Token is " + token)
+            const cookieOptions = {
+                expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000),
+                httpOnly: true
+              };
+        
+            res.cookie('jwt', token, cookieOptions);
+            
+            return res.status(200).redirect('/');
+            })
+
+        
+    } catch (error) {
+        console.log(error);
+         res.status(500).send('Server error');
+    }
+    
+
+
+};
