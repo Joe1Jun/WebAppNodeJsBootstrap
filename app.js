@@ -5,9 +5,14 @@ const session = require('express-session');
 const bodyParser = require("body-parser");
 const ejs = require('ejs');
 // Import the routes module
-const routes = require('./routes.js');
+const routes = require('./routes/routes');
 // Import the custom authentication module
 const auth = require('./auth.js');
+//path to dotenv file
+dotenv.config({
+    path: './.env'
+})
+
 
 
 const app = express();

@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
 // Import your authentication module
-const auth = require('./auth.js'); 
+const auth = require('../auth'); 
 // Import your database connection module
-const connection = require('./database.js'); 
+const connection = require('../database.js'); 
 //import functions.js module
-const { calculateTotal,quantityControl } = require('./functions.js');
+const { calculateTotal,quantityControl } = require('../functions.js');
 
 
 

@@ -1,17 +1,17 @@
 // configures database and exports it as a module
 const mysql2 = require('mysql2');
-
+const dotenv = require('dotenv');
 // Create a connection to the MySQL database
 const connection = mysql2.createConnection({
     
      // Hostname of the MySQL server
-    host: 'localhost',
+    host: process.env.DATABASE_HOST,
     // Username for authentication
-    user: 'root',
+    user: process.env.DATABASE_USER,
      // passowrd for authentication
-    password: 'root',
+    password:  process.env.DATABASE_PASSWORD,
      // Database name
-    database: 'G00438811'
+    database: process.env.DATABASE 
 });
 // Attempt to establish a connection to the MySQL database
 connection.connect((err) => {
