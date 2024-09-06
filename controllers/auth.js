@@ -125,3 +125,23 @@ exports.login = (req, res) => {
 
 
 };
+
+exports.logout = (req, res) => {
+    
+  // Log the logout action
+  console.log('User logged out:', req.user ? req.user.name : 'Unknown user');
+  res.cookie('jwt', 'logout', {
+    
+    expires: new Date(Date.now() + 2 * 1000),
+    httpOnly: true
+  })
+
+   
+   res.status(200).redirect('/')
+
+
+
+
+
+
+}
