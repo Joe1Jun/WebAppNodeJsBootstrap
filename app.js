@@ -5,6 +5,7 @@ const path = require('path');
 
 //const session = require('express-session');
 const bodyParser = require("body-parser");
+const cookieParser = require('cookie-parser');
 const ejs = require('ejs');
 
 // Import the custom authentication module
@@ -27,8 +28,12 @@ const publicDirectory = path.join(__dirname, '/public');
 // Configure app to use bodyParser middleware for handling form data
 // This extended: true tells express to parse the form data and populate the req.body object with it 
 // true allows for nested objects to be parsed and false allow for aonly simple key value pairs to be parsed
-// true allows for both cases so is usually the default
+// true allows for both cases so is usually the default. 
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+
+// Parse cookies
+app.use(cookieParser()); 
 // Set EJS as the view engine for rendering pages
 app.set("view engine", "ejs");
 // Serve static files from 'public'  directories

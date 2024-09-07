@@ -11,7 +11,8 @@ router.post('/register', userController.register)
       .post('/login', userController.login)
       .get('/logout', userController.logout)
       
-router.post('/addtoCart',verifyUser, cartController.addToCart)
+router.post('/addToCart', verifyUser, cartController.addToCart)
+      .get('/cart', verifyUser, cartController.getCart)
       .post('/cart', verifyUser, cartController.removeFromCart) 
       .post('/cart', verifyUser, cartController.changeProductQuantity)     
 

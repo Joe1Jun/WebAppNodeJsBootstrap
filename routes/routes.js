@@ -45,9 +45,49 @@ router.get('/shop1', (req, res) => {
          res.render('shop1', { prodCategories: results });
          console.log("Connected to table");
        });
-   });
+});
+   // ****** The productIds taken from the shop1 only display the correct items in shop2 because the Ids are the same *****//
 
-// // Route to view the checkout page from the checkout button 
+ router.get('/shop2', (req, res) => {
+   //This line extracts the value of the "id" query parameter from the request URL. This parameter is passed from the link in the "shop1.ejs" file.
+   const productId = req.query.id;
+   console.log(productId)
+   // Check if the product ID is provided
+
+   if (!productId) {
+     // If not provided, send a 400 Bad Request response
+       res.status(400).send('Product ID is required');
+       return;
+   }
+    // Execute the SQL query using the connection object
+   // The productId is passed as a parameter to the query to fetch the specific product
+  // The callback function receives two parameters: 'err' for potential errors and 'result' for the query result
+   db.query('SELECT * FROM products WHERE Id = ?', [productId], (error, result) => {
+
+     // If an error occurs during the query, throw the error
+     if (error) {
+       console.log(error)
+       res.status(500).send("Interal Server Error")
+           throw error;
+       }
+       // Check if the result is falsy (null, undefined, empty) or if the result array is empty
+     if (!result || result.length === 0) {
+         // If the product is not found in the database,
+         // set the HTTP response status to 404 Not Found
+         // and send a message indicating that the product was not found
+           res.status(404).send('Product not found');
+           return;
+       }
+
+       // Renders the shop2.ejs template with the product data
+     // as this page only renders one result the result set to the first index
+     res.render('shop2', { product: result[0], message: "" });
+   });
+ });
+
+
+
+//  // Route to view the checkout page from the checkout button
 // router.get('/checkout', (req, res) => {
 //   const cart = req.session.cart || [];
 //   const total = calculateTotal(cart, req);
@@ -102,64 +142,7 @@ router.get('/shop1', (req, res) => {
 
 // });
 
-// router.get('/shop1', (req, res) => {
-//     // Query to select all products from the database
-//     // stores the query in a variable called sql to improve readabilty
-//     const sql = 'SELECT * FROM prodCategories';
-    
-//     // Execute the query
-    
-//     connection.query(sql, (err, results) => {
-//       if (err) {
-//         throw err;
-//       }
-//       // Render the EJS template with product data
-//       res.render('shop1', { prodCategories: results });
-//       console.log("Connected to table");
-//     });
-// });
 
-
-
-// router.get('/shop2', (req, res) => {
-//   //This line extracts the value of the "id" query parameter from the request URL. This parameter is passed from the link in the "shop1.ejs" file.
-//   const productId = req.query.id;
-
-//   // Check if the product ID is provided
-
-//   if (!productId) {
-//     // If not provided, send a 400 Bad Request response
-//       res.status(400).send('Product ID is required');
-//       return;
-//   }
-
-//   // Query to select the product with the given ID from the database
-//   // stores the query in a variable called sql to improve readabilty
-//   const sql = 'SELECT * FROM products WHERE Id = ?';
-
-//  // Execute the SQL query using the connection object
-//   // The productId is passed as a parameter to the query to fetch the specific product
-// // The callback function receives two parameters: 'err' for potential errors and 'result' for the query result
-//   connection.query(sql, [productId], (err, result) => {
-
-//     // If an error occurs during the query, throw the error
-//       if (err) {
-//           throw err;
-//       }
-//       // Check if the result is falsy (null, undefined, empty) or if the result array is empty
-//     if (!result || result.length === 0) {
-//         // If the product is not found in the database,
-//     // set the HTTP response status to 404 Not Found
-//     // and send a message indicating that the product was not found
-//           res.status(404).send('Product not found');
-//           return;
-//       }
-
-//       // Renders the shop2.ejs template with the product data
-//     // as this page only renders one result the result set to the first index
-//     res.render('shop2', { product: result[0], message: "" });
-//   });
-// });
 
 // // Route to add item to cart
 
@@ -197,16 +180,7 @@ router.get('/shop1', (req, res) => {
 // // Web lesson below had some good ideas for add to cart.
 // // <!-- https://www.webslesson.info/2023/03/how-to-make-shopping-cart-in-nodejs.html-->
 
-// // Route to view the cart page
-// router.get('/cart', (req, res) => {
-//   // Retrieve cart and total from the session
-  
-//   const cart = req.session.cart || [];
-  
-//   if (cart.length === 0) {
-//     // If the cart is empty, render the 'empty cart' page
-//     return res.render('emptyCart');
-//   }
+
 
   
 
@@ -339,3 +313,12 @@ router.get('/shop1', (req, res) => {
 // //exports routes as modules
 
 module.exports = router;
+
+
+
+// //<div class="container text-center" id="checkout-main-container">
+// <!--total is displayed dynamically and is calculated by the calculateTotal function in functions.js module-->
+// <h5 class="mb-4">Total:€<%= total %></h5>
+// <div class="container text-center">
+//   <!-- Form for checkout button -->
+//   <!--checkout button links to /checkout page unless user is not authenticated true auth.js and express-session in which case they will be directed to log in -->

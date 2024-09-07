@@ -105,12 +105,7 @@
       <% }); %>
     </div>
 
-    <div class="container text-center" id="checkout-main-container">
-      <!--total is displayed dynamically and is calculated by the calculateTotal function in functions.js module-->
-      <h5 class="mb-4">Total:€<%= total %></h5>
-      <div class="container text-center">
-        <!-- Form for checkout button -->
-        <!--checkout button links to /checkout page unless user is not authenticated true auth.js and express-session in which case they will be directed to log in -->
+    
 
         <form action="/checkout" method="get">
           <button type="submit" class="mb-4 btn btn-primary">Checkout</button>

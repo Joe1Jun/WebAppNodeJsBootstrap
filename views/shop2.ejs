@@ -3,7 +3,6 @@
 <!--https://www.youtube.com/watch?v=bTYqeQ6p7bM&t=6023s-->
 <!--https://www.youtube.com/watch?v=V5xoeyOtgIA&t=4s-->
 
-
 <!-- design inspired by https://www.nueko.de/-->
 <!--the main container is styles in css   -->
 
@@ -32,7 +31,7 @@
   </head>
   <body>
     <%- include('navbar') %>
-    
+
     <!-- Add a gap under the navbar -->
     <div style="height: 200px"></div>
 
@@ -41,17 +40,16 @@
     <div class="container" id="shop2maincontainer">
       <!--row Organizes the content horizontally.-->
       <div class="row">
-      <!-- Left Section - Images -->
-       <!--columns within a row automatically resize to fit the parent container.-->
-       <!--col-8 to make the image column on the left bigger than the right.  -->
+        <!-- Left Section - Images -->
+        <!--columns within a row automatically resize to fit the parent container.-->
+        <!--col-8 to make the image column on the left bigger than the right.  -->
         <div class="col-8">
           <div class="image-container text-center">
-            
             <!--This loops thorugh the three images associated with each product-->
             <!-- Easy to implement due to the names of the images -->
             <!-- images are  dynamically rendered -->
             <% for (let i = 1; i <= 3; i++) { %>
-              <!--img-fluid does not applyis there for future use. smaller-image is styles in css.rounded-3 rounds the corners of the image-->
+            <!--img-fluid does not applyis there for future use. smaller-image is styles in css.rounded-3 rounds the corners of the image-->
             <img
               src="/images/shop2Images/<%= product['image' + i] %>"
               alt=""
@@ -79,45 +77,29 @@
             <!-- Add to Cart button -->
             <!--form is created to add products to the cart -->
             <!--the post method brings the program to the add_to_cart route which will bring the user to a rendered cart page when a product is added via the add to cart button-->
-            <form action="/add_to_cart" method="post">
-              <!--all inputs are hidden as we only need to see the add to cart button-->
-              <!--the name will be retreived by the route handler and used to add the product to the cart array-->
-              <!--The cart array is stored in the express-session in node.js -->
-              <input type="hidden" name="Id" value="<%= product.Id %>" />
-              <input type="hidden" name="name" value="<%= product.name %>" />
-              <input type="hidden" name="price" value="<%= product.price %>" />
-              <input
-                type="hidden"
-                name="description"
-                value="<%= product.description %>"
-              />
-              <!--default quantity is 1 that can be adjusted on the cart page-->
-              <input type="hidden" name="quantity" value="1" />
-              
-             
-              <input
-                type="hidden"
-                name="image1"
-                value="<%= product.image1 %>"
-              />
+            <form action="/auth/addToCart" method="post">
+              <!--Only one hidden input is used so the route handler can access the productId to add to cart-->
 
-             <!--message will display if user inforamtion is incorrect. Message is defined in the route handler-->
-          
-             <!--message will display if user inforamtion is incorrect. Message is defined in the route handler-->
-          <% if (message) { %>
-            <div class="d-flex p-0">
-              <!--message will display in a box beneath password in red . alert = red-->
-              <div class="alert alert-danger mt-2" role="alert">
-                <%= message %>
-              </div>
-            </div>
-            <% } %>
-            <!--div to center button -->
-               <div class="text-center">
+              <input type="hidden" name="productId" value="<%= product.Id %>" />
 
-                <button type="submit" class="btn btn-primary">Add to Cart</button>
+              <!--message will display if user inforamtion is incorrect. Message is defined in the route handler-->
+
+              <!--message will display if user inforamtion is incorrect. Message is defined in the route handler-->
+              <% if (message) { %>
+              <div class="d-flex p-0">
+                <!--message will display in a box beneath password in red . alert = red-->
+                <div class="alert alert-danger mt-2" role="alert">
+                  <%= message %>
+                </div>
               </div>
-             
+              <% } %>
+              <!--div to center button -->
+              <div class="text-center">
+                <button type="submit" class="btn btn-primary">
+                  Add to Cart
+                </button>
+              </div>
+            </form>
           </div>
         </div>
         <!--end right side of shop2 main container-->
