@@ -1,7 +1,8 @@
-const { Router } = require('express')
+// This controls the routes that require authentication.
+
 const express = require('express')
 const router = express.Router()
-const authController = require('../controllers/auth')
+const authController = require('../controllers/users')
 
 
 

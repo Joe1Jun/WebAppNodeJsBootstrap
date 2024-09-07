@@ -25,6 +25,9 @@ const app = express();
 const publicDirectory = path.join(__dirname, '/public');
 //app.use(session({ secret: "secret" }));
 // Configure app to use bodyParser middleware for handling form data
+// This extended: true tells express to parse the form data and populate the req.body object with it 
+// true allows for nested objects to be parsed and false allow for aonly simple key value pairs to be parsed
+// true allows for both cases so is usually the default
 app.use(bodyParser.urlencoded({ extended: true }));
 // Set EJS as the view engine for rendering pages
 app.set("view engine", "ejs");

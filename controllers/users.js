@@ -14,6 +14,12 @@ exports.register = (req, res) => {
          // Destructuring the 'name', 'email', 'password', and 'passwordConfirm' fields from the request body ie. the registration.ejs page
        const { name, email, password, passwordConfirm } = req.body;
       
+      // Check if any of the fields are missing or empty
+      if (!name || !email || !password || !passwordConfirm) {
+        return res.render('register', {
+            message: "Please fill out all fields"
+        });
+    }
       
        // Querying the database to check if the email already exists in the 'users' table
        db.query('SELECT email FROM users WHERE email = ?', [email], async (error, results) => {
