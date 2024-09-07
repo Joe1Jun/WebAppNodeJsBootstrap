@@ -2,13 +2,18 @@
 
 const express = require('express')
 const router = express.Router()
-const authController = require('../controllers/users')
+const verifyUser = require('../middleware/verifyUser')
+const userController = require('../controllers/users')
+const cartController = require('../controllers/cart')
 
 
-
-router.post('/register', authController.register)
-      .post('/login', authController.login)
-      .get('/logout', authController.logout)
+router.post('/register', userController.register)
+      .post('/login', userController.login)
+      .get('/logout', userController.logout)
       
+router.post('/addtoCart',verifyUser, cartController.addToCart)
+      .post('/cart', verifyUser, cartController.removeFromCart) 
+      .post('/cart', verifyUser, cartController.changeProductQuantity)     
+
 
 module.exports = router

@@ -3,7 +3,7 @@ const router = express.Router();
 // Import your authentication module
 const auth = require('../auth'); 
 // Import your database connection module
-const connection = require('../database.js'); 
+const db = require('../database.js'); 
 //import functions.js module
 const { calculateTotal,quantityControl } = require('../functions.js');
 
@@ -28,26 +28,24 @@ router.get('/register', (req, res) => {
    res.render('register', {message: ""})
 })
 
-// Route handler for handling POST requests to '/shop1' from login1 page'
-//login1 page is used for login at the beginning of the session and is accessed from the homepage.
-// router.post('/shop1', (req, res) => {
-//   // Extract the username and password from the request body
-//   const { username, password } = req.body;
-//   // Authenticate the user using the provided username and password
-//   const authenticated = auth.authenticateUser(username, password);
-//   if (authenticated) {
-//       // Set isAuthenticated flag in session to true
-//     req.session.isAuthenticated = true;
-//     console.log("login successfull")
-//       // Redirect to the home page or wherever you want after successful login
-//       res.redirect('/shop1');
-//   } else {
-//       // If authentication fails, render the login page with an error message
-//       res.render("login", { message: "Incorrect username or password. Please try again." });
-//   }
-//   console.log(req.body);
 
-// });
+router.get('/shop1', (req, res) => {
+      // Query to select all products from the database
+       // stores the query in a variable called sql to improve readabilty
+     
+       // Execute the query
+      
+       db.query('SELECT * FROM prodCategories', (err, results) => {
+        if (err) {
+           throw err;
+         }
+         // Render the EJS template with product data
+         // Passes the prodCategories objects to the ejs page
+         // Will all be rendered dynamically.
+         res.render('shop1', { prodCategories: results });
+         console.log("Connected to table");
+       });
+   });
 
 // // Route to view the checkout page from the checkout button 
 // router.get('/checkout', (req, res) => {
