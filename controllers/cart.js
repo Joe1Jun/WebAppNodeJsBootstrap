@@ -33,18 +33,18 @@ exports.addToCart = async (req, res) => {
 exports.getCart = (req, res) => {
 
     const userId = req.user.Id
-
+// Identifiers in Sql are case insensitive 
     db.query(
         `SELECT
-            cart.id,
-            cart.user_id,
-            cart.product_id,
+            cart.Id,
+            cart.user_Id,
+            cart.product_Id,
             products.name,
             products.price,
             products.description,
             products.image1
         FROM cart
-        JOIN products ON cart.product_id = products.id
+        JOIN products ON cart.product_Id = products.Id
         WHERE cart.user_id = ?`,
         [userId],
         (error, results) => {

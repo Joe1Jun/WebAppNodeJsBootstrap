@@ -21,6 +21,9 @@ res.render("about" );
 
 // Route to render the login1 page
 router.get('/login', (req, res) => {
+
+
+  
   res.render("login", { message: "" }); // Render the login page with an empty message
 });
 

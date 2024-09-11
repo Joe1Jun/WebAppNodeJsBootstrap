@@ -8,9 +8,7 @@ const verifyUser = (req, res, next) =>{
     const token = req.cookies.jwt
 
     if (!token) {
-        return res.status(401).redirect('/login', {
-            message : "Please log in first"
-        })
+        return res.redirect('/login?message=Please log in first');
     }
     // verify token using secret key
     jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {

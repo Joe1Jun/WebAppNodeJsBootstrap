@@ -74,32 +74,32 @@
               <p class="mb-4">€<%= product.price %></p>
             </div>
 
+            <!--div to center button -->
             <!-- Add to Cart button -->
-            <!--form is created to add products to the cart -->
-            <!--the post method brings the program to the add_to_cart route which will bring the user to a rendered cart page when a product is added via the add to cart button-->
-            <form action="/auth/addToCart" method="post">
-              <!--Only one hidden input is used so the route handler can access the productId to add to cart-->
-
-              <input type="hidden" name="productId" value="<%= product.Id %>" />
-
-              <!--message will display if user inforamtion is incorrect. Message is defined in the route handler-->
-
-              <!--message will display if user inforamtion is incorrect. Message is defined in the route handler-->
-              <% if (message) { %>
-              <div class="d-flex p-0">
-                <!--message will display in a box beneath password in red . alert = red-->
-                <div class="alert alert-danger mt-2" role="alert">
-                  <%= message %>
-                </div>
+            <!-- Instead of a form, we'll use a button with an onclick event -->
+            <div class="text-center">
+              <button
+                type="button"
+                class="btn btn-primary"
+                onclick="addToCart({
+                  id: '<%= product.Id %>',
+                  name: '<%= product.name %>',
+                  price: '<%= product.price %>',
+                  quantity: 1
+                })"
+              >
+                Add to Cart
+              </button>
+            </div>
+            <!--message will display if user inforamtion is incorrect. Message is defined in the route handler-->
+            <% if (message) { %>
+            <div class="d-flex p-0">
+              <!--message will display in a box beneath password in red . alert = red-->
+              <div class="alert alert-danger mt-2" role="alert">
+                <%= message %>
               </div>
-              <% } %>
-              <!--div to center button -->
-              <div class="text-center">
-                <button type="submit" class="btn btn-primary">
-                  Add to Cart
-                </button>
-              </div>
-            </form>
+            </div>
+            <% } %>
           </div>
         </div>
         <!--end right side of shop2 main container-->
@@ -112,5 +112,25 @@
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
+
+    <!-- Your custom JavaScript should be here -->
+    <script>
+      function addToCart(product) {
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+        const existingProductIndex = cart.findIndex(
+          (item) => item.id === product.id
+        );
+
+        if (existingProductIndex > -1) {
+          cart[existingProductIndex].quantity += 1;
+        } else {
+          cart.push(product);
+        }
+
+        localStorage.setItem("cart", JSON.stringify(cart));
+        alert("Item added to cart");
+      }
+    </script>
   </body>
 </html>
