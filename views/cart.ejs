@@ -28,108 +28,87 @@
     <div class="text-center" style="height: 100px">
       <h1>Cart</h1>
     </div>
-
-    <!-- Main container -->
     <div class="container" id="checkout-main-container">
-      <!-- Iterate over each product in the cart -->
-      <% cart.forEach(product => { %>
-      <!-- Product container -->
-      <div class="row">
-        <!-- Left Section - Image -->
-        <div class="col-6">
-          <div class="container text-center">
-            <img
-              src="/images/shop2Images/<%= product.image1 %>"
-              alt=""
-              class="img-fluid mb-3 product-image rounded-3"
-            />
-          </div>
-        </div>
-        <!-- Right Section - Product Description -->
-        <!-- col-6 takes 6 columns of bootstraps grid system-->
-        <!--text-center places text in center-->
-        <div class="col-6 mt-4">
-          <div class="text-container">
-            <div class="text-center">
-              <!-- mb-4 gives margin bottom to add spacing-->
-              <!-- product information is displayed dyanmicallu after being passed from /cart route-->
-              <h5 class="mb-4"><%= product.name %></h5>
-              <p class="mb-4" style="font-size: 1.2rem">
-                <%= product.description %>
-              </p>
-              <p class="mb-4">€<%= product.price %></p>
-              <!-- this form is for increasing or decreasing product quantity-->
-
-              <form action="/edit_product_quantity" method="post">
-                <!-- Hidden input for product Id -->
-                <input type="hidden" value="<%= product.Id %>" name="Id" />
-
-                <!-- Button to decrease quantity -->
-                <!-- Button name to identify which action to perform -->
-                <!-- names are  used in router.post('/edit_product_quantity') route -->
-                <input
-                  type="submit"
-                  value="-"
-                  name="decrease_product_quantity"
-                />
-
-                <!-- Input to display quantity (readonly) -->
-                <!-- Makes the input readonly -->
-                <input
-                  type="text"
-                  name="quantity"
-                  value="<%= product.quantity %>"
-                  readonly
-                />
-
-                <!-- Button to increase quantity -->
-                <!-- Button name to identify which action to perform this will be used in the route -->
-
-                <input
-                  type="submit"
-                  value="+"
-                  name="increase_product_quantity"
-                />
-              </form>
-              <!-- This form access the /remove_product route that will delete the product object from the cart.session array when the remove button is executed-->
-              <!-- It uses the id of the object that is retreived by the -->
-              <form action="/remove_product" method="post">
-                <input type="hidden" name="Id" value="<%= product.Id %>" />
-
-                <button class="btn btn-primary mt-4">Remove</button>
-              </form>
-            </div>
-          </div>
-        </div>
+      <div id="cart-items-container">
+        <!-- Cart items will be dynamically populated here by JavaScript -->
       </div>
-      <% }); %>
     </div>
 
-    
-
-        <form action="/checkout" method="get">
-          <button type="submit" class="mb-4 btn btn-primary">Checkout</button>
-        </form>
-      </div>
+    <!-- Main container for checkout button -->
+    <div class="container text-center mt-4">
+      <form action="/checkout" method="get">
+        <button type="submit" class="mb-4 btn btn-primary">Checkout</button>
+      </form>
     </div>
 
     <%- include('footer') %>
+
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
-    >
-  
-   function addToCart (product){
-        
-    let cart = JSON.parse(localStorage.getItem('cart')) || []
+    ></script>
 
-    cart.push(product)
+    <script>
+      window.onload = function () {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-    localStorage.setItem('cart', JSON.stringify(cart));
+        const cartItemsContainer = document.getElementById(
+          "cart-items-container"
+        );
 
+        if (cart.length === 0) {
+          cartItemsContainer.innerHTML =
+            ' <div class="container text-center"><h2>Cart is Empty<h2/></div>';
+        } else {
+          cart.forEach((product) => {
+            const productHTML = `
+              <div class="row mb-4">
+                <!-- Product Image Section -->
+                <div class="col-6">
+                  <div class="container text-center">
+                    <img
+                       src="/images/shop2Images/${product.image}"
+                       alt="${product.name}"
+                       class="img-fluid mb-3 product-image rounded-3"
+                    />
+                  </div>
+                </div>
+                <!-- Product Description Section -->
+                <div class="col-6 mt-4">
+                  <div class="text-container">
+                    <div class="text-center">
+                      <h5 class="mb-4">${product.name}</h5>
+                      <p class="mb-4" style="font-size: 1.2rem">${product.description}</p>
+                      <p class="mb-4">€${product.price}</p>
+                      <form action="/edit_product_quantity" method="post">
+                        <input type="hidden" value="${product.id}" name="id" /> <!-- Change Id to id -->
+                        <input type="submit" value="-" name="decrease_product_quantity" />
+                        <input type="text" name="quantity" value="${product.quantity}" readonly />
+                        <input type="submit" value="+" name="increase_product_quantity" />
+                      </form>
+                      <!-- Remove from Cart Button -->
+                      <button type="button" class="btn btn-danger mt-3" onclick="removeFromCart('${product.id}')"> <!-- Change Id to id -->
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `;
 
-    }
-  </script>
+            cartItemsContainer.innerHTML += productHTML;
+          });
+        }
+      };
+
+      // Define the removeFromCart function
+      function removeFromCart(productId) {
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        cart = cart.filter((product) => product.id !== productId);
+        localStorage.setItem("cart", JSON.stringify(cart));
+        window.location.reload(); // Reload the page to reflect the changes
+      }
+    </script>
   </body>
 </html>

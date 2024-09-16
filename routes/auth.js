@@ -12,8 +12,8 @@ router.post('/register', userController.register)
       .get('/logout', userController.logout)
       
 router.post('/addToCart', verifyUser, cartController.addToCart)
-      .get('/cart', verifyUser, cartController.getCart)
-      .post('/cart', verifyUser, cartController.removeFromCart) 
+      //.get('/cart', verifyUser, cartController.getCart)
+      .post('/removeFromCart', verifyUser, cartController.removeFromCart) 
       .post('/cart', verifyUser, cartController.changeProductQuantity)     
 
 

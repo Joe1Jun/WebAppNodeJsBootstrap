@@ -84,7 +84,9 @@
                 onclick="addToCart({
                   id: '<%= product.Id %>',
                   name: '<%= product.name %>',
-                  price: '<%= product.price %>',
+                  description: '<%= product.description %>',
+                  price: `<%= product.price %> `,
+                  image: '<%= product.image1 %>',
                   quantity: 1
                 })"
               >

@@ -66,13 +66,14 @@ exports.getCart = (req, res) => {
 }
 
 exports.removeFromCart = (req, res) => {
-    
+   
+
 
 
 }
 
 exports.changeProductQuantity = (req, res) => {
     
-
+    
 
 }

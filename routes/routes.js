@@ -89,25 +89,29 @@ router.get('/shop1', (req, res) => {
  });
 
 
+ router.get('/cart', (req, res) => {
+  res.render('cart', { cartItems: [] }); // Initially send empty cartItems
+});
 
-//  // Route to view the checkout page from the checkout button
-// router.get('/checkout', (req, res) => {
-//   const cart = req.session.cart || [];
-//   const total = calculateTotal(cart, req);
-  
-//   // Check if the user is authenticated
-//   if (!req.session.isAuthenticated) {
-//       // If not authenticated, redirect to the login page 
-//     // this log in page rendered if not authenicated will redirect to checkout from a post request.
-//     console.log(" id not entered")
-//       return res.redirect('/login');
-//   }
-  
-//   // If authenticated, render the checkout page
-//   res.render('checkout', { cart: cart, total: total });
-//   console.log("was authenicated before")
+router.post('/cart', (req, res) => {
+  const cartItems = req.body.cartItems || [];
+  res.render('cart', { cartItems });
+});
 
-// });
+
+
+ // Route to view the checkout page from the checkout button
+router.get('/checkout', (req, res) => {
+  
+
+  
+  
+  
+  
+
+});
+
+
 
 
 
