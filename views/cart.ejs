@@ -134,9 +134,14 @@
         for (let i = 0; i < cart.length; i++) {
           if (cart[i].Id === productId) {
             cart[i].quantity--;
+            if (cart[i].quantity <= 0) {
+              removeFromCart(productId);
+              return; // Exit the function early as we've removed the item
+            }
             break;
           }
         }
+
         // Save the updated cart back to localStorage
         localStorage.setItem("cart", JSON.stringify(cart));
       }
