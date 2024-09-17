@@ -82,7 +82,7 @@
                 type="button"
                 class="btn btn-primary"
                 onclick="addToCart({
-                  id: '<%= product.Id %>',
+                  Id: '<%= product.Id %>',
                   name: '<%= product.name %>',
                   description: '<%= product.description %>',
                   price: `<%= product.price %> `,
@@ -120,16 +120,26 @@
       function addToCart(product) {
         let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-        const existingProductIndex = cart.findIndex(
-          (item) => item.id === product.id
-        );
+        // Initialize variable to store the index of the existing product
+        let existingProductIndex = -1;
 
+        // Loop through the cart array manually
+        for (let i = 0; i < cart.length; i++) {
+          // Check if the current item's Id matches the product's Id
+          if (cart[i].Id === product.Id) {
+            existingProductIndex = i;
+            break; // Exit the loop early since we found a match
+          }
+        }
+
+        // If the product exists in the cart, increase its quantity
         if (existingProductIndex > -1) {
           cart[existingProductIndex].quantity += 1;
         } else {
+          // Otherwise, add the new product to the cart
           cart.push(product);
         }
-
+        // After the logic to add the cart item has run the localStorage is set.
         localStorage.setItem("cart", JSON.stringify(cart));
         alert("Item added to cart");
       }
