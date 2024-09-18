@@ -82,4 +82,26 @@
     </div>
   </div>
 </nav>
+
+<script>
+  // Function to calculate and update the cart count
+  function updateCartCount() {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const cartCountElement = document.getElementById("cart-count");
+    let totalCartCount = 0;
+
+    // Calculate total quantity from the cart
+    cart.forEach((product) => {
+      totalCartCount += product.quantity;
+    });
+
+    // Update the cart count in the navbar
+    cartCountElement.textContent = totalCartCount;
+  }
+
+  // Call the function when the DOM content is fully loaded
+  document.addEventListener("DOMContentLoaded", function () {
+    updateCartCount();
+  });
+</script>
 <!--end Bootstrap styled navbar-->

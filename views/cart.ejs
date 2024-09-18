@@ -52,7 +52,6 @@
     <script>
       window.onload = function () {
         const cart = JSON.parse(localStorage.getItem("cart")) || [];
-
         const cartItemsContainer = document.getElementById(
           "cart-items-container"
         );
@@ -63,52 +62,57 @@
         } else {
           cart.forEach((product) => {
             const productHTML = `
-              <div class="row mb-4">
-                <!-- Product Image Section -->
-                <div class="col-6">
-                  <div class="container text-center">
-                    <img
-                       src="/images/shop2Images/${product.image}"
-                       alt="${product.name}"
-                       class="img-fluid mb-3 product-image rounded-3"
-                    />
-                  </div>
-                </div>
-                <!-- Product Description Section -->
-                <div class="col-6 mt-4">
-                  <div class="text-container">
-                    <div class="text-center">
-                      <h5 class="mb-4">${product.name}</h5>
-                      <p class="mb-4" style="font-size: 1.2rem">${product.description}</p>
-                      <p class="mb-4">€${product.price}</p>
-                      <form action="/cart" method="post">
-                        <input type="hidden" value="${product.Id}" name="id" /> 
-                        <input type="submit" value="-" onclick="decreaseQuantity('${product.Id}')" />
-                        <input type="text" name="quantity" value="${product.quantity}" readonly />
-                        <input type="submit" value="+" onclick="increaseQuantity('${product.Id}')" />
-                      </form>
-                      <!-- Remove from Cart Button -->
-                      <button type="button" class="btn btn-danger mt-3" onclick="removeFromCart('${product.Id}')"> 
-                        Remove
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            `;
+  <div class="row mb-4" id="product-${product.Id}">
+    <!-- Product Image Section -->
+    <div class="col-6">
+      <div class="container text-center">
+        <img
+           src="/images/shop2Images/${product.image}"
+           alt="${product.name}"
+           class="img-fluid mb-3 product-image rounded-3"
+        />
+      </div>
+    </div>
+    <!-- Product Description Section -->
+    <div class="col-6 mt-4">
+      <div class="text-container">
+        <div class="text-center">
+          <h5 class="mb-4">${product.name}</h5>
+          <p class="mb-4" style="font-size: 1.2rem">${product.description}</p>
+          <p class="mb-4">€${product.price}</p>
+          
+          <input type="hidden" value="${product.Id}" name="id" /> 
+          <input type="submit"  value="-" onclick="decreaseQuantity('${
+            product.Id
+          }')" />
+          <input type="text"  name="quantity" id="quantity-${
+            product.Id
+          }" value="${product.quantity}" readonly />
+          <input type="submit"  value="+" onclick="increaseQuantity('${
+            product.Id
+          }')" />
+        
+          <!-- Remove from Cart Button -->
+          <div class="text-center">
+            <button type="button" class="btn btn-danger mt-3" onclick="removeFromCart('${
+              product.Id
+            }')"> 
+              Remove
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br/>
+  <div class="text-center">
+    <h3>Total: ${product.price * product.quantity}</h3> </div>
+`;
 
             cartItemsContainer.innerHTML += productHTML;
           });
         }
       };
-
-      // Define the removeFromCart function
-      function removeFromCart(productId) {
-        let cart = JSON.parse(localStorage.getItem("cart")) || [];
-        cart = cart.filter((product) => product.Id !== productId);
-        localStorage.setItem("cart", JSON.stringify(cart));
-        window.location.reload(); // Reload the page to reflect the changes
-      }
 
       function increaseQuantity(productId) {
         let cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -116,17 +120,18 @@
         // Loop through the cart and find the product by Id
         for (let i = 0; i < cart.length; i++) {
           if (cart[i].Id === productId) {
-            // Increase the quantity of the product
             cart[i].quantity++;
-            break; // Stop looping once the product is found
+            // Update the quantity in the DOM
+            document.querySelector(`#quantity-${productId}`).value =
+              cart[i].quantity;
+            break;
           }
         }
 
         // Save the updated cart back to localStorage
         localStorage.setItem("cart", JSON.stringify(cart));
-
-        // Reload the page to reflect the updated quantity
-        // window.location.reload();
+        // Update the cart count in the navbar
+        updateCartCount();
       }
 
       function decreaseQuantity(productId) {
@@ -136,7 +141,11 @@
             cart[i].quantity--;
             if (cart[i].quantity <= 0) {
               removeFromCart(productId);
-              return; // Exit the function early as we've removed the item
+              return;
+            } else {
+              // Update the quantity in the DOM
+              document.querySelector(`#quantity-${productId}`).value =
+                cart[i].quantity;
             }
             break;
           }
@@ -144,6 +153,22 @@
 
         // Save the updated cart back to localStorage
         localStorage.setItem("cart", JSON.stringify(cart));
+        // Update the cart count in the navbar
+        updateCartCount();
+      }
+
+      function removeFromCart(productId) {
+        let cart = JSON.parse(localStorage.getItem("cart")) || [];
+        cart = cart.filter((product) => product.Id !== productId);
+        localStorage.setItem("cart", JSON.stringify(cart));
+
+        // Remove the product from the DOM
+        const productElement = document.querySelector(`#product-${productId}`);
+        if (productElement) {
+          productElement.remove();
+        }
+        // Update the cart count in the navbar
+        updateCartCount();
       }
     </script>
   </body>

@@ -141,7 +141,8 @@
         }
         // After the logic to add the cart item has run the localStorage is set.
         localStorage.setItem("cart", JSON.stringify(cart));
-        alert("Item added to cart");
+        const cartCountElement = document.getElementById("cart-count");
+        cartCountElement.textContent++;
       }
     </script>
   </body>
