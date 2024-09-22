@@ -34,6 +34,10 @@
       </div>
     </div>
 
+    <div class="container text-center mt-4">
+      <h3 id="total-price">Total: €0.00</h3>
+    </div>
+
     <!-- Main container for checkout button -->
     <div class="container text-center mt-4">
       <form action="/checkout" method="get">
@@ -82,21 +86,13 @@
           <p class="mb-4">€${product.price}</p>
           
           <input type="hidden" value="${product.Id}" name="id" /> 
-          <input type="submit"  value="-" onclick="decreaseQuantity('${
-            product.Id
-          }')" />
-          <input type="text"  name="quantity" id="quantity-${
-            product.Id
-          }" value="${product.quantity}" readonly />
-          <input type="submit"  value="+" onclick="increaseQuantity('${
-            product.Id
-          }')" />
+          <input type="submit"  value="-" onclick="decreaseQuantity('${product.Id}')" />
+          <input type="text"  name="quantity" id="quantity-${product.Id}" value="${product.quantity}" readonly />
+          <input type="submit"  value="+" onclick="increaseQuantity('${product.Id}')" />
         
           <!-- Remove from Cart Button -->
           <div class="text-center">
-            <button type="button" class="btn btn-danger mt-3" onclick="removeFromCart('${
-              product.Id
-            }')"> 
+            <button type="button" class="btn btn-danger mt-3" onclick="removeFromCart('${product.Id}')"> 
               Remove
             </button>
           </div>
@@ -104,13 +100,14 @@
       </div>
     </div>
   </div>
-  <br/>
-  <div class="text-center">
-    <h3>Total: ${product.price * product.quantity}</h3> </div>
+  
+   
 `;
 
             cartItemsContainer.innerHTML += productHTML;
           });
+          // Calculate the total price after the cart is rendered
+          calculateTotalPrice();
         }
       };
 
@@ -132,6 +129,7 @@
         localStorage.setItem("cart", JSON.stringify(cart));
         // Update the cart count in the navbar
         updateCartCount();
+        calculateTotalPrice();
       }
 
       function decreaseQuantity(productId) {
@@ -155,6 +153,22 @@
         localStorage.setItem("cart", JSON.stringify(cart));
         // Update the cart count in the navbar
         updateCartCount();
+        calculateTotalPrice();
+      }
+
+      function calculateTotalPrice() {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        let totalPrice = 0;
+
+        // Loop through the cart to calculate the total price
+        cart.forEach((product) => {
+          totalPrice += product.price * product.quantity;
+        });
+
+        // Update the total price in the DOM
+        document.getElementById(
+          "total-price"
+        ).textContent = `Total: €${totalPrice}`;
       }
 
       function removeFromCart(productId) {
