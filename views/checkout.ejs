@@ -35,7 +35,7 @@
     <div style="height: 100px"></div>
 
     <!-- Main container -->
-    <div class="text-center">
+    <div class="text-center" id="checkout-container">
       <h1>Summary of order</h1>
       
 
@@ -229,5 +229,18 @@
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
+    <script>
+      const cart =JSON.parse(localStorage.getItem("cart") || []);
+      const checkoutContainer = document.getElementById("checkout-container");
+
+      if(cart.length === 0 ){
+         checkoutContainer.innerHTML = `
+          <div class="text-center container"> 
+               <h2>The cart is empty  </h2>
+            </div>
+
+         `
+      }
+    </script>
   </body>
 </html>

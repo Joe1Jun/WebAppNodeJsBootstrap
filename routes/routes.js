@@ -91,7 +91,12 @@ router.get('/shop1', (req, res) => {
 
  router.get('/cart', (req, res) => {
   res.render('cart', { cartItems: [] }); // Initially send empty cartItems
-});
+ });
+
+router.get('/checkout', (req, res) => {
+   
+  res.render('checkout', {cartItems: []})
+ })
 
 router.post('/cart', (req, res) => {
   const cartItems = req.body.cartItems || [];
