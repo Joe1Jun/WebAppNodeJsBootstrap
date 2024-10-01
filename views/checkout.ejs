@@ -37,96 +37,13 @@
     <!-- Main container -->
     <div class="text-center" id="checkout-container">
       <h1>Summary of order</h1>
-      
+      </div>
 
  
-      <!--creates a container div-->
-      <div class="container">
-        <!-- Carousel class tells bootstrap to apply the carousel component sets up basic structure to allow carousel to function -->
-        <!-- slide class adds a sliding animation to the carousel -->
-        <!-- id of slider is esesential as its used internally by bootstraps javascript to associate actions like sliding to next item with the correct carousel instance.-->
-
-        <div class="carousel slide" id="slider">
-          <div class="carousel-inner">
-            <!-- the method forEach()  loops through each of the cart results retreived from the cart array stored in espress-session -->
-            <!--the loop takes two parameters product which represents the product object in the current iteration
-              and index which represents the current project object in the array -->
-            <!-- the following html code will be executed for each on of the results that has been passed to this page-->
-
-            <% cart.forEach((product, index) => { %>
-              <!--The index === 0 ? 'active' condition applies the active class to the first carousel item only. This ensures that the first item is initially displayed when the carousel loads. -->
-          <!-- This ternary operator checks if there is a first element in the array -->
-          <!-- if there is, the operator returns active which adds the active class to the current carousel item -->
-          <!-- if false the operator returns an empty string so no active class is added and the carousel remains inactive-->
-            <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
-              <!-- d-flex applies the flexbox display property to create a flex container.
-                justify-content-center horizontally centers the content within the flex container.
-                align-items-center vertically centers the content within the flex container.-->
-              <div class="d-flex justify-content-center align-items-center">
-                <!--bootstrap card created-->
-                <div class="card">
-                  <!-- Display the product image within the card dynamically for each product. -->
-                  <!-- card-img-top defines the image as a card image that will be displayed on top of the card-->
-                  <!-- img fluid added even though there is css to counteract. Left it in for future development-->
-                  <img
-                    src="/images/shop2Images/<%= product.image1 %>"
-                    alt=""
-                    class="card-img-top img-fluid"
-                  />
-                   <!--Card body below image . text-center centers text in card body-->
-                  <div class="card-body text-center">
-                    <!--card-title class displays a title dynamically from datatbase results-->
-                    <h5 class="card-title"><%= product.name %></h5>
-                     <!--card-text used for text within card. Display the product description dynamically-->
-                    <p class="card-text">€<%= product.price %></p>
-                    <p class="card-text"><%= product.description %></p>
-                    <p class="card-text">
-                      Quantity selected: <%= product.quantity %>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <% }) %>
-          </div>
-      
-          <!-- Buttons -->
-          <!-- targets the id of slider specified above at the start of the carousel code block-->
-        <button
-         
-            class="carousel-control-prev"
-            data-bs-slide="prev"
-            data-bs-target="#slider"
-          >
-            <span class="carousel-control-prev-icon"></span>
-            <span class="visually-hidden">Previous</span>
-          </button>
-          <button
-            class="carousel-control-next"
-            data-bs-slide="next"
-            data-bs-target="#slider"
-          >
-            <span class="carousel-control-next-icon"></span>
-            <span class="visually-hidden">Next</span>
-          </button>
-        </div>
-      </div>
-      
-
-    <!-- Checkout Form -->
-    <!-- Standard form from bootstrap website-->
-    <div class="container mt-8" id="checkout-main-container">
-      <div class="row justify-content-center">
-        <div class="col-md-6">
-          <div class="text-container">
-            <div class="text-center">
-              <h2 class="mb-4">Checkout</h2>
-              <h5 class="mb-4">Total:€<%= total %></h5>
-            </div>
          <!--form leads to order confirmation page-->
          <!-- all inputs are required so and a specified type so that info has to be entered-->
          <!-- all inputs must be filled-->
-         
+         <div class="container text-center"></div>
          <!-- Name is retreived by the route from the request body to be displayed dynamically on the order_confirmation page -->
             <form action="/order_confirmation" method="post">
               <div class="form-group">
@@ -230,17 +147,62 @@
       crossorigin="anonymous"
     ></script>
     <script>
-      const cart =JSON.parse(localStorage.getItem("cart") || []);
-      const checkoutContainer = document.getElementById("checkout-container");
+      window.onload = function () {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const cartItemsContainer = document.getElementById(
+          "checkout-container"
+        );
 
-      if(cart.length === 0 ){
-         checkoutContainer.innerHTML = `
-          <div class="text-center container"> 
-               <h2>The cart is empty  </h2>
-            </div>
+        if (cart.length === 0) {
+          cartItemsContainer.innerHTML =
+            ' <div class="container text-center"><h2>Cart is Empty<h2/></div>';
+        } else {
+          cart.forEach((product) => {
+            const productHTML = `
+  <div class="row mb-4" id="product-${product.Id}">
+    <!-- Product Image Section -->
+    <div class="col-6">
+      <div class="container text-center">
+        <img
+           src="/images/shop2Images/${product.image}"
+           alt="${product.name}"
+           class="img-fluid mb-3 product-image rounded-3"
+        />
+      </div>
+    </div>
+    <!-- Product Description Section -->
+    <div class="col-6 mt-4">
+      <div class="text-container">
+        <div class="text-center">
+          <h5 class="mb-4">${product.name}</h5>
+          <p class="mb-4" style="font-size: 1.2rem">${product.description}</p>
+          <p class="mb-4">€${product.price}</p>
+          
+          <input type="hidden" value="${product.Id}" name="id" /> 
+          <input type="submit"  value="-" onclick="decreaseQuantity('${product.Id}')" />
+          <input type="text"  name="quantity" id="quantity-${product.Id}" value="${product.quantity}" readonly />
+          <input type="submit"  value="+" onclick="increaseQuantity('${product.Id}')" />
+        
+          <!-- Remove from Cart Button -->
+          <div class="text-center">
+            <button type="button" class="btn btn-danger mt-3" onclick="removeFromCart('${product.Id}')"> 
+              Remove
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+   
+`;
 
-         `
-      }
-    </script>
+            cartItemsContainer.innerHTML += productHTML;
+          });
+          // Calculate the total price after the cart is rendered
+          calculateTotalPrice();
+        }
+      };
+      </script>
   </body>
 </html>
